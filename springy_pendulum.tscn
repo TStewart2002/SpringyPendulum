@@ -1,0 +1,100 @@
+[gd_scene load_steps=13 format=3 uid="uid://cewixgytscn1y"]
+
+[ext_resource type="Script" path="res://springy_pendulum.cs" id="1_2s4vu"]
+[ext_resource type="Texture2D" uid="uid://umsqtkdtr4qc" path="res://Textures/kenney-prototype-textures-db6622fbe90621eed70a0b417ae8d97281f45e6c/addons/kenney_prototype_textures/dark/texture_04.png" id="1_4vgmy"]
+[ext_resource type="PackedScene" uid="uid://dgxwvehspcn4u" path="res://Models381/SpringModel.tscn" id="3_yulkk"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cp8il"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_3n48c"]
+sky_material = SubResource("ProceduralSkyMaterial_cp8il")
+
+[sub_resource type="Environment" id="Environment_ygypv"]
+background_mode = 2
+sky = SubResource("Sky_3n48c")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d04ie"]
+albedo_texture = ExtResource("1_4vgmy")
+uv1_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_q17gr"]
+material = SubResource("StandardMaterial3D_d04ie")
+size = Vector2(4, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2yq7j"]
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_5qsd1"]
+material = SubResource("StandardMaterial3D_2yq7j")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ibotc"]
+uv1_triplanar = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_w2ayh"]
+material = SubResource("StandardMaterial3D_ibotc")
+radius = 0.05
+height = 0.1
+
+[node name="SpringyPendulum" type="Node3D"]
+script = ExtResource("1_2s4vu")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ygypv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_q17gr")
+
+[node name="Anchor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.744485, 0)
+mesh = SubResource("BoxMesh_5qsd1")
+
+[node name="Ball" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.317458, 0)
+mesh = SubResource("SphereMesh_w2ayh")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26251, 2.24703)
+
+[node name="SpringModel" parent="." instance=ExtResource("3_yulkk")]
+
+[node name="XCoord" type="Label" parent="."]
+offset_top = 1.0
+offset_right = 40.0
+offset_bottom = 24.0
+
+[node name="YCoord" type="Label" parent="."]
+offset_left = 1.0
+offset_top = 30.0
+offset_right = 41.0
+offset_bottom = 53.0
+
+[node name="ZCoord" type="Label" parent="."]
+offset_left = 1.0
+offset_top = 69.0
+offset_right = 41.0
+offset_bottom = 92.0
+
+[node name="PE" type="Label" parent="."]
+offset_top = 229.0
+offset_right = 40.0
+offset_bottom = 252.0
+
+[node name="KE" type="Label" parent="."]
+offset_left = 2.0
+offset_top = 261.0
+offset_right = 42.0
+offset_bottom = 284.0
+
+[node name="Total Energy" type="Label" parent="."]
+offset_top = 292.0
+offset_right = 40.0
+offset_bottom = 315.0
