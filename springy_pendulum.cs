@@ -31,7 +31,7 @@ public partial class springy_pendulum : Node3D
 	public override void _Ready()
 	{
 		GD.Print("In Godot");
-		xA = 0.0; yA = 1.5;	zA = 0.0;
+		xA = 0.0; yA = 1.2;	zA = 0.0;
 		Anchor = GetNode<MeshInstance3D>("Anchor");
 		Ball = GetNode<MeshInstance3D>("Ball");
 		spring = GetNode<SpringModel>("SpringModel");

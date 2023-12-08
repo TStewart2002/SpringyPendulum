@@ -62,7 +62,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.317458, 0)
 mesh = SubResource("SphereMesh_w2ayh")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.26251, 2.24703)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11723, 2.24703)
 
 [node name="SpringModel" parent="." instance=ExtResource("3_yulkk")]
 

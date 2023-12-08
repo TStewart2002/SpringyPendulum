@@ -26,8 +26,8 @@ public class SimSpringyPend
     {
         Lo = 0.9;
         g = 9.81;
-        m = 0.5;
-        k = 36.0;
+        m = 1.4;
+        k = 90.0;
         n = 6;
         x = new double[n];
         xA = new double[n];
@@ -45,12 +45,12 @@ public class SimSpringyPend
 
 
 
-        x[0] = 1.0;    //Initial x
+        x[0] = -0.7;    //Initial x
         x[1] = 0.0;    //Initial x dot
-        x[2] = 0.1;    //Initial y
+        x[2] = -0.2;    //Initial y
         x[3] = 0.0;    //Initial y dot
-        x[4] = 1.0;    //Initial z
-        x[5] = 0.0;    //Initial z dot
+        x[4] = 0.5;    //Initial z
+        x[5] = 0.9;    //Initial z dot
 
         
         
@@ -157,7 +157,7 @@ public class SimSpringyPend
         
         double PE, KE; //Potential and kinetic energy
 
-        PE = (0.5)*(k)*(L-Lo)*(L-Lo) + (m)*(g)*(x[2] - (AncPos.Y - Lo));
+        PE = (0.5)*(k)*(L-Lo)*(L-Lo) + (m)*(g)*(x[2]);
         KE = (0.5)*(m)*((x[1])*(x[1]) + (x[3])*(x[3]) + (x[5])*(x[5]));
        
        
