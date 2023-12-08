@@ -14,7 +14,8 @@ public partial class springy_pendulum : Node3D
 	Label TotalEnergy;
 
 	SimSpringyPend pend;
-	
+
+	Simulator sim;
 
 	double xA, yA, zA;	//Coords of anchor
 	float Lo;	//Natural length of pendulum
@@ -47,6 +48,7 @@ public partial class springy_pendulum : Node3D
 		Anchor.Position = endA;	//Set initial position of anchor in Godot
 
 		pend = new SimSpringyPend();
+		sim = new Simulator(6);
 
 		Lo = length = 0.9f;
 		spring.GenMesh(0.05f, 0.015f, length, 6.0f, 62);
@@ -82,10 +84,6 @@ public partial class springy_pendulum : Node3D
 		KE.Text = Energy[1].ToString("0.00");
 		TotalEnergy.Text = Energy[2].ToString("0.00");
 
-
-		//pend.StepRK2(time, delta, endA);
-		pend.StepRK4(time, delta, endA);
-
 		
 		endB.X = (float)pend.XCoord;
 		endB.Y = (float)pend.YCoord;
@@ -94,8 +92,15 @@ public partial class springy_pendulum : Node3D
 		time += delta;
 	}
 
+    public override void _PhysicsProcess(double delta)
+    {
+        base._PhysicsProcess(delta);
 
-	private void PlacePendulum(Vector3 endBB)
+		pend.StepRK4(time, delta, endA);
+    }
+
+
+    private void PlacePendulum(Vector3 endBB)
 	{
 		Ball.Position = endBB;
 		spring.PlaceEndPoints(endA, endB);
