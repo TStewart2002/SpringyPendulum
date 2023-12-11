@@ -1,47 +1,47 @@
 using System;
 using Godot;
 
-public class SimSpringyPend
+public class SimSpringyPend : Simulator
 {
     private double Lo;  //Natural spring length
-    private double g;   //Grav field constant
+    //private double g;   //Grav field constant
     private double m;   //Mass of pendulum bob
     private double k;   //Spring constant
     
 
-    private int n;  //Number of Dif Eqs.
-    private double[] x; //Array of states
-    private double[] xA;  //Intermediate states for RK2
-    private double[] xi;    //Intermediate states for RK4
+    // private int n;  //Number of Dif Eqs.
+    // private double[] x; //Array of states
+    // private double[] xA;  //Intermediate states for RK2
+    // private double[] xi;    //Intermediate states for RK4
 
-    private double[][] f;    //Array of slopes
-    private double[][] f4;   //Array of slopes for RK4
+    // private double[][] f;    //Array of slopes
+    // private double[][] f4;   //Array of slopes for RK4
 
 
 
     // ------------------------------------------------------------
     //  Constructor
     // ------------------------------------------------------------
-    public SimSpringyPend()
+    public SimSpringyPend() : base(6)
     {
         Lo = 0.9;
-        g = 9.81;
+        //g = 9.81;
         m = 1.4;
         k = 90.0;
-        n = 6;
-        x = new double[n];
-        xA = new double[n];
-        f = new double[2][];
-        f[0] = new double[n];   //fA
-        f[1] = new double[n];   //fB
+        // n = 6;
+        // x = new double[n];
+        // xA = new double[n];
+        // f = new double[2][];
+        // f[0] = new double[n];   //fA
+        // f[1] = new double[n];   //fB
 
         //RK4 Initialization
-        xi = new double[n];
-        f4 = new double[4][];
-        f4[0] = new double[n];   //fA
-        f4[1] = new double[n];   //fB
-        f4[2] = new double[n];   //fC
-        f4[3] = new double[n];   //fD
+        // xi = new double[n];
+        // f4 = new double[4][];
+        // f4[0] = new double[n];   //fA
+        // f4[1] = new double[n];   //fB
+        // f4[2] = new double[n];   //fC
+        // f4[3] = new double[n];   //fD
 
 
 
@@ -53,71 +53,71 @@ public class SimSpringyPend
         x[5] = 0.9;    //Initial z dot
 
         
-        
+        SetRHSFunc(RHSFuncPendulum);
     }
 
 
     // ------------------------------------------------------------
     //  Step RK2: Completes RK2 step in solving equations of motion
     // ------------------------------------------------------------
-    public void StepRK2(double time, double dt, Vector3 AncPos)
-    {
-        int i;
+    // public void StepRK2(double time, double dt, Vector3 AncPos)
+    // {
+    //     int i;
 
-        RHSFuncPendulum(x, time, f[0], AncPos);
-        for (i = 0; i < n; i++)
-        {
-            xA[i] = x[i] + f[0][i]*dt;
-        }
+    //     RHSFuncPendulum(x, time, f[0], AncPos);
+    //     for (i = 0; i < n; i++)
+    //     {
+    //         xA[i] = x[i] + f[0][i]*dt;
+    //     }
 
-        RHSFuncPendulum(xA, time+dt, f[1], AncPos);
-        for (i = 0; i < n; i++)
-        {
-            x[i] = x[i] + 0.5*(f[0][i] + f[1][i])*dt;
-        }
-    }
+    //     RHSFuncPendulum(xA, time+dt, f[1], AncPos);
+    //     for (i = 0; i < n; i++)
+    //     {
+    //         x[i] = x[i] + 0.5*(f[0][i] + f[1][i])*dt;
+    //     }
+    // }
 
 
 
     // ------------------------------------------------------------
     //  Step RK4: Completes RK4 step in solving equations of motion
     // ------------------------------------------------------------
-    public void StepRK4(double time, double dt, Vector3 AncPos)
-    {
-        int i;
+    // public void StepRK4(double time, double dt, Vector3 AncPos)
+    // {
+    //     int i;
 
-        //Calc fA
-        RHSFuncPendulum(x, time, f4[0], AncPos);
-        //Calc xA
-        for (i = 0; i < n; i++)
-        {
-            xi[i] = x[i] + (0.5)*f4[0][i]*dt;
-        }
+    //     //Calc fA
+    //     RHSFuncPendulum(x, time, f4[0], AncPos);
+    //     //Calc xA
+    //     for (i = 0; i < n; i++)
+    //     {
+    //         xi[i] = x[i] + (0.5)*f4[0][i]*dt;
+    //     }
 
-        //Calc fB
-        RHSFuncPendulum(xi, time+(0.5*dt), f4[1], AncPos);
-        //Calc xB
-        for(i = 0; i < n; i++)
-        {
-            xi[i] = x[i] + (0.5)*f4[1][i]*dt;
-        }
+    //     //Calc fB
+    //     RHSFuncPendulum(xi, time+(0.5*dt), f4[1], AncPos);
+    //     //Calc xB
+    //     for(i = 0; i < n; i++)
+    //     {
+    //         xi[i] = x[i] + (0.5)*f4[1][i]*dt;
+    //     }
 
-        //Calc fC
-        RHSFuncPendulum(xi, time+(0.5*dt), f4[2], AncPos);
-        //Calc xC
-        for(i = 0; i < n; i++)
-        {
-            xi[i] = x[i] + f4[2][i]*dt;
-        }
+    //     //Calc fC
+    //     RHSFuncPendulum(xi, time+(0.5*dt), f4[2], AncPos);
+    //     //Calc xC
+    //     for(i = 0; i < n; i++)
+    //     {
+    //         xi[i] = x[i] + f4[2][i]*dt;
+    //     }
 
-        //Calc fD
-        RHSFuncPendulum(xi, time+dt, f4[3], AncPos);
-        //Calc xK+1
-        for(i = 0; i < n; i++)
-        {
-            x[i] = x[i] + (1.0/6.0)*(f4[0][i] + (2.0)*f4[1][i] + (2.0)*f4[2][i] + f4[3][i])*dt;
-        }
-    }
+    //     //Calc fD
+    //     RHSFuncPendulum(xi, time+dt, f4[3], AncPos);
+    //     //Calc xK+1
+    //     for(i = 0; i < n; i++)
+    //     {
+    //         x[i] = x[i] + (1.0/6.0)*(f4[0][i] + (2.0)*f4[1][i] + (2.0)*f4[2][i] + f4[3][i])*dt;
+    //     }
+    // }
 
 
 
@@ -128,11 +128,11 @@ public class SimSpringyPend
     // ------------------------------------------------------------
     //  RHSFuncPendulum
     // ------------------------------------------------------------
-    private void RHSFuncPendulum(double[] xx, double t, double[] ff, Vector3 AncPos)
+    private void RHSFuncPendulum(double[] xx, double t, double[] ff)//, Vector3 AncPos)
     {
-    double dx = xx[0] - AncPos.X;
-    double dy = xx[2] - AncPos.Y;
-    double dz = xx[4] - AncPos.Z;
+    double dx = xx[0] - 0;//AncPos.X;
+    double dy = xx[2] - 1.2;//AncPos.Y;
+    double dz = xx[4] - 0;//AncPos.Z;
     double L = Math.Sqrt((dx*dx) + (dy*dy) + (dz*dz));
 
     ff[0] = xx[1];
@@ -157,8 +157,8 @@ public class SimSpringyPend
         
         double PE, KE; //Potential and kinetic energy
 
-        PE = (0.5)*(k)*(L-Lo)*(L-Lo) + (m)*(g)*(x[2]);
-        KE = (0.5)*(m)*((x[1])*(x[1]) + (x[3])*(x[3]) + (x[5])*(x[5]));
+        PE = (0.5)*k*(L-Lo)*(L-Lo) + m*g*x[2];
+        KE = (0.5)*m*(x[1]*x[1] + x[3]*x[3] + x[5]*x[5]);
        
        
         double[] Energy;

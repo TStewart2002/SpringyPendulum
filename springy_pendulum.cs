@@ -96,7 +96,7 @@ public partial class springy_pendulum : Node3D
     {
         base._PhysicsProcess(delta);
 
-		pend.StepRK4(time, delta, endA);
+		pend.Step(time, delta);
     }
 
 
